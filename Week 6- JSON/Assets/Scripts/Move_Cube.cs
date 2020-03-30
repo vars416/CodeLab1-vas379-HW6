@@ -5,48 +5,48 @@ using UnityEngine;
 
 public class Move_Cube : MonoBehaviour
 {
-    float mouseZPos; //holds the mouse position of the object
-    Rigidbody rb; //holds the Rigidbody
-    Collider col; //holds the Collider
-    string filePath; //holds path to this objects save file
+    float mousePos; //Mouse position in the scene
+    Rigidbody rb; //Rigidbody
+    Collider col; //Collider
+    string filePath; //file's save path
 
     void Start()
     {
         filePath = Application.dataPath + "/" + name + ".json";
 
-        rb = GetComponent<Rigidbody>(); //get the rigidbody component
-        col = GetComponent<Collider>(); //get the collider component
+        rb = GetComponent<Rigidbody>(); //get the rigidbody
+        col = GetComponent<Collider>(); //get the collider
 
-        if (File.Exists(filePath)) //if the save file exists
+        if (File.Exists(filePath)) //if save file exists
         {
             string jsonStr = File.ReadAllText(filePath); //load it as a string
 
-            Vector3 savePos = JsonUtility.FromJson<Vector3>(jsonStr); //turn the Json into an object
+            Vector3 savePos = JsonUtility.FromJson<Vector3>(jsonStr); //turn the JSON into an object
 
-            rb.MovePosition(savePos); //move the savePos
+            rb.MovePosition(savePos); //move the saved position
         }
     }
 
     void OnMouseDrag()
-    { //if you drag the mouse over the gameObject
-        mouseZPos = Camera.main.WorldToScreenPoint(gameObject.transform.position).z; //get the Z position of the object at the screen
+    {
+        mousePos = Camera.main.WorldToScreenPoint(gameObject.transform.position).z; //get the Z position of the object
 
-        rb.isKinematic = true; //make it uneffected by physics
-        rb.MovePosition(GetMouseAsWorldPoint()); //move it to the new mouse position
+        rb.isKinematic = true; //make kinematics true
+        rb.MovePosition(GetMouseAsWorldPoint()); //move object
 
-        col.enabled = false; //turn off the collider
+        col.enabled = false; //turn off collider
     }
 
-    private void OnMouseUp() //if you release the mouse over the object
+    private void OnMouseUp() //un-clicking mouse / release mouse click
     {
-        col.enabled = true; //trun on collisions
+        col.enabled = true; //turn on collisions
     }
 
     Vector3 GetMouseAsWorldPoint()
     {
-        Vector3 mousePoint = Input.mousePosition; //Pixel coordinates of mouse (x,y)
+        Vector3 mousePoint = Input.mousePosition; //co-ordinates of mouse on screen
 
-        mousePoint.z = mouseZPos; //z coordinate of gameObject on screen
+        mousePoint.z = mousePos; //get Z coordinates of the gameobject on screen
 
         return Camera.main.ScreenToWorldPoint(mousePoint);  //Convert it to world points
     }
@@ -54,6 +54,6 @@ public class Move_Cube : MonoBehaviour
     private void OnApplicationQuit()
     {
         string pos = JsonUtility.ToJson(transform.position, true);
-        File.WriteAllText(filePath, pos);
+        File.WriteAllText(filePath, pos); //save new position to JSON file
     }
 }

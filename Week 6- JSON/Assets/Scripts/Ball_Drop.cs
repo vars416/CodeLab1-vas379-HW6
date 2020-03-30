@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Ball_Drop : MonoBehaviour
 {
-    Rigidbody rb; //var for rigidbody
+    Rigidbody rb; //Rigidbody
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); //Get RigidBody Component
-        rb.isKinematic = true; //Make it Kinematic (ie, doen't move with physics)
+        rb = GetComponent<Rigidbody>(); //Get the RigidBody component
+        rb.isKinematic = true; //Turn on Kinematic
     }
 
-    private void OnMouseDown() //if you click on the object
+    private void OnMouseDown() //on clicking the object
     {
-        rb.isKinematic = false; //make it able to move w/ physics
+        rb.isKinematic = false; //move without physics
     }
 }
